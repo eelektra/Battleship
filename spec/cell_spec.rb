@@ -37,8 +37,13 @@ describe Cell do
         cell.fire_upon
 
         expect(cell.ship.health).to eq(2)
-
         expect(cell.fired_upon?).to eq(true)
-
     end
+
+    it "can render cell 1" do
+    cell_1 = Cell.new("B4")
+
+    expect(cell_1.render).to eq(".")
+    cell_1.fire_upon
+    expect(cell_1.render).to eq("M")
 end
