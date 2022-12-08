@@ -59,9 +59,12 @@ class Board
             num_2.to_i - 1 == num_1.to_i 
         end
     end
-       
 end
 
+#diagonal coordinates
+#
+
+#consecutive coordinates
 # all the letters are the same
 # the letters are consecutive
 # all the numbers are the same
