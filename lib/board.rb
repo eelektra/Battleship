@@ -25,44 +25,44 @@ class Board
         @cells[coordinate] != nil
     end
 
-    def valid_placement?(ship, coordinates)
-        require 'pry'; binding.pry
-        (ship && coordinates) == (ship && coordinates) 
-        false
+    def valid_placement?(ship, coordinates) 
+        letters_array = all_letters(coordinates) 
+        numbers_array = all_numbers(coordinates)
+        valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+        # require 'pry'; binding.pry
+    end
+    
+    def consecutive_valid_placement?(ship, coordinates)
+        all_letters
     end
 
-    def consecutive_coordinates?(ship, coordinates)
-       #board letters are horizontal, numbers are vertical
-
-        #coordinate != index
-       #.split will split a string into separate
-       #gsub substitutes all of one letter for another letter
-
-        # all the letters are consecutive
-        # coordinates.each_cons(A)
-
-        # all numbers are the same 
-        numbers_array
-        numbers_array.each_cons(2).all? do |num_1,num_2| 
-            num_1.split == num_2.split
-        end
-        # all the numbers are consecutive
-        # coordinates.each_cons(1..4)
-
-        # letters are the same
-        letters_array
-        letters_array.each_cons(2).all? do |num_1,num_2| 
-            ltr_1 == ltr_2
-        end
-               
-
-         
-            
-        
-    end
-             
-    def 
-        
+    def all_letters(coordinates)
+        coordinates.map do |coordinate| 
+            coordinate.split('').first 
         end
     end
+    
+    def valid_consecutive_letters(letters_array)
+        letters_array.each_cons(2).all? do |letter_1, letter_2| 
+            letter_2.ord - 1 == letter_1.ord 
+        end
+    end
+
+    def all_numbers(coordinates)
+        coordinates.map do|coordinate| 
+            coordinate.split('').last 
+        end
+    end
+
+    def valid_consecutive_numbers(numbers_array)
+        numbers_array.each_cons(2).all? do |num_1, num_2| 
+            num_2.to_i - 1 == num_1.to_i 
+        end
+    end
+       
 end
+
+# all the letters are the same
+# the letters are consecutive
+# all the numbers are the same
+# the numbers are consective
