@@ -24,17 +24,18 @@ class Cell
         ship.hit if ship != nil
     end
 
-    def render()
-        if @fired_upon == false
-            "."
-        elsif @fired_upon == true && ship == nil
-             "M"
-        elsif @fired_upon == false && ship != nil
+    def render(show = false)
+        # showing only if we provide an argument
+        if @fired_upon == false && ship != nil && show == true 
             "S" 
-        elsif @fired_upon == true && ship != nil
-            "H" 
+        elsif @fired_upon == true && ship == nil
+            "M"
         elsif @fired_upon == true && ship.sunk? == true
             "X"
+        elsif @fired_upon == true && ship != nil
+            "H" 
+        elsif @fired_upon == false
+            "."
         end
     end
 end
