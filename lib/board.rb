@@ -26,10 +26,15 @@ class Board
     end
 
     def valid_placement?(ship, coordinates) 
-        letters_array = all_letters(coordinates) 
-        numbers_array = all_numbers(coordinates)
-        valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
-        # require 'pry'; binding.pry
+        if  letters_array = all_letters(coordinates) 
+            numbers_array = all_numbers(coordinates)
+            valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+            valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates)
+            #diagonals occur when both numbers and letters are consecutive at the same time
+        else 
+            #has valid placement if above statements arent false
+            #require 'pry'; binding.pry
+        end
     end
     
     def consecutive_valid_placement?(ship, coordinates)
@@ -62,7 +67,9 @@ class Board
 end
 
 #diagonal coordinates
-#
+#letters cannot be consecutive && numbers cannot be consecutive
+
+
 
 #consecutive coordinates
 # all the letters are the same
