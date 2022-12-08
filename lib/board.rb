@@ -25,8 +25,54 @@ class Board
         @cells[coordinate] != nil
     end
 
-    def valid_placement?(ship, coordinate)
-        (ship && coordinate) == (ship && coordinate) 
-        false
+    def valid_placement?(ship, coordinates) 
+        if  letters_array = all_letters(coordinates) 
+            numbers_array = all_numbers(coordinates)
+            valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+            valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates)
+            #diagonals occur when both numbers and letters are consecutive at the same time
+        else 
+            #has valid placement if above statements arent false
+            #require 'pry'; binding.pry
+        end
+    end
+    
+    def consecutive_valid_placement?(ship, coordinates)
+        all_letters
+    end
+
+    def all_letters(coordinates)
+        coordinates.map do |coordinate| 
+            coordinate.split('').first 
+        end
+    end
+    
+    def valid_consecutive_letters(letters_array)
+        letters_array.each_cons(2).all? do |letter_1, letter_2| 
+            letter_2.ord - 1 == letter_1.ord 
+        end
+    end
+
+    def all_numbers(coordinates)
+        coordinates.map do|coordinate| 
+            coordinate.split('').last 
+        end
+    end
+
+    def valid_consecutive_numbers(numbers_array)
+        numbers_array.each_cons(2).all? do |num_1, num_2| 
+            num_2.to_i - 1 == num_1.to_i 
+        end
     end
 end
+
+#diagonal coordinates
+#letters cannot be consecutive && numbers cannot be consecutive
+
+
+
+#consecutive coordinates
+# all the letters are the same
+# the letters are consecutive
+# all the numbers are the same
+# the numbers are consective
