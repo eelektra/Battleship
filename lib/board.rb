@@ -94,4 +94,12 @@ class Board
                 end
         end
     end
+
+    def render
+        @cells[coordinates].map do |coordinate|
+            #call render from cell Class
+        end
+
+
+    end
 end

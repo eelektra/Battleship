@@ -25,7 +25,6 @@ class Cell
     end
 
     def render(show = false)
-        # showing only if we provide an argument
         if @fired_upon == false && ship != nil && show == true 
             "S" 
         elsif @fired_upon == true && ship == nil
