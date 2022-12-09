@@ -28,22 +28,23 @@ class Board
     def valid_placement?(ship, coordinates) 
         letters_array = all_letters(coordinates) 
         numbers_array = all_numbers(coordinates)
-
-        if ship.length != coordinates.length
+        empty = not_overlapping?(coordinates) 
+    
+        if ship.length != coordinates.length 
             false
-        elsif valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+        elsif valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array) 
             false
-        elsif valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates)
+        elsif valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates) 
             false
-        elsif valid_consecutive_numbers(numbers_array) && valid_duplicate_letters(letters_array)
+        elsif valid_consecutive_numbers(numbers_array) && valid_duplicate_letters(letters_array) && empty
             true
-        elsif valid_duplicate_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+        elsif valid_duplicate_numbers(numbers_array) && valid_consecutive_letters(letters_array) && empty
             true
         elsif !valid_consecutive_numbers(numbers_array) 
             false
         end
     end
-
+    
     def all_letters(coordinates)
         coordinates.map do |coordinate| 
             coordinate.split('').first 
@@ -55,7 +56,7 @@ class Board
             letter_2.ord - 1 == letter_1.ord 
         end
     end
-
+    
     def all_numbers(coordinates)
         coordinates.map do|coordinate| 
             coordinate.split('').last 
@@ -69,28 +70,28 @@ class Board
     end
 
     def valid_duplicate_numbers(numbers_array)
-        # require 'pry'; binding.pry
         numbers_array.each_cons(2).all? do |num_1, num_2| 
             num_2.to_i == num_1.to_i 
         end
     end
 
     def valid_duplicate_letters(letters_array)
-        # require 'pry'; binding.pry
         letters_array.each_cons(2).all? do |letter_1, letter_2| 
             letter_2.ord == letter_1.ord 
         end
     end
 
+    def not_overlapping?(coordinates)
+        coordinates.all? do |coordinate| 
+            @cells[coordinate].empty?
+        end
+    end
+    
+    def place(ship, coordinates)
+        if valid_placement?(ship, coordinates)
+            coordinates.each do |coordinate|
+                    @cells[coordinate].place_ship(ship)
+                end
+        end
+    end
 end
-
-#diagonal coordinates
-#letters cannot be consecutive && numbers cannot be consecutive
-
-
-
-#consecutive coordinates
-# all the letters are the same
-# the letters are consecutive
-# all the numbers are the same
-# the numbers are consective
