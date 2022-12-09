@@ -26,19 +26,22 @@ class Board
     end
 
     def valid_placement?(ship, coordinates) 
-        if  letters_array = all_letters(coordinates) 
-            numbers_array = all_numbers(coordinates)
-            valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
-            valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates)
-            #diagonals occur when both numbers and letters are consecutive at the same time
-        else 
-            #has valid placement if above statements arent false
-            #require 'pry'; binding.pry
+        letters_array = all_letters(coordinates) 
+        numbers_array = all_numbers(coordinates)
+
+        if ship.length != coordinates.length
+            false
+        elsif valid_consecutive_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+            false
+        elsif valid_consecutive_numbers(coordinates) && valid_consecutive_letters(coordinates)
+            false
+        elsif valid_consecutive_numbers(numbers_array) && valid_duplicate_letters(letters_array)
+            true
+        elsif valid_duplicate_numbers(numbers_array) && valid_consecutive_letters(letters_array)
+            true
+        elsif !valid_consecutive_numbers(numbers_array) 
+            false
         end
-    end
-    
-    def consecutive_valid_placement?(ship, coordinates)
-        all_letters
     end
 
     def all_letters(coordinates)
@@ -64,6 +67,21 @@ class Board
             num_2.to_i - 1 == num_1.to_i 
         end
     end
+
+    def valid_duplicate_numbers(numbers_array)
+        # require 'pry'; binding.pry
+        numbers_array.each_cons(2).all? do |num_1, num_2| 
+            num_2.to_i == num_1.to_i 
+        end
+    end
+
+    def valid_duplicate_letters(letters_array)
+        # require 'pry'; binding.pry
+        letters_array.each_cons(2).all? do |letter_1, letter_2| 
+            letter_2.ord == letter_1.ord 
+        end
+    end
+
 end
 
 #diagonal coordinates
