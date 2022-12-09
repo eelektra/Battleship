@@ -19,6 +19,7 @@ class Board
             "D3" => Cell.new("D3"),
             "D4" => Cell.new("D4"),
         }
+        
     end
 
     def valid_coordinate?(coordinate)
@@ -80,6 +81,10 @@ class Board
         letters_array.each_cons(2).all? do |letter_1, letter_2| 
             letter_2.ord == letter_1.ord 
         end
+    end
+
+    def place(ship, coordinates)
+        #This method places the ship on the coordinates
     end
 
 end
