@@ -30,7 +30,7 @@ describe Board do
         expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
     end
 
-    it 'has non-consecutive coordinates' do
+    it 'has consecutive coordinates' do
         board = Board.new
         cruiser = Ship.new("Cruiser", 3)
         submarine = Ship.new("Submarine", 2) 
