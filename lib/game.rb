@@ -73,5 +73,35 @@ class Game
     > C1 D1"
   end
 
-  
+  def computer_board
+    "=============COMPUTER BOARD=============
+      1 2 3 4
+    A M . . M
+    B . . . .
+    C . . . .
+    D . . . ."
+  end
+
+  def player_board
+    "==============PLAYER BOARD==============
+      1 2 3 4
+    A S S S .
+    B . M . .
+    C M . S .
+    D . . S ."
+  end
+
+  def player_shot
+    "Enter the coordinate for your shot:
+    > D5
+    Please enter a valid coordinate:
+    > Z1
+    Please enter a valid coordinate:
+    > A4"
+  end
+
+  def computer_shot
+    "Your shot on #{coordinate} was a miss.
+    My shot on #{coordinate} was a miss."
+  end
 end
