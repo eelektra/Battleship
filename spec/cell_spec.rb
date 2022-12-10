@@ -31,11 +31,8 @@ describe Cell do
         cruiser = Ship.new("Cruiser", 3)
 
         cell.place_ship(cruiser)
-        
         expect(cell.fired_upon?).to eq(false)
-
         cell.fire_upon
-
         expect(cell.ship.health).to eq(2)
         expect(cell.fired_upon?).to eq(true)
     end
@@ -54,9 +51,7 @@ describe Cell do
 
         cell_2.place_ship(cruiser)
         expect(cell_2.render).to eq(".")
-
         expect(cell_2.render(true)).to eq("S")
-        # returns S if argument is true
         cell_2.fire_upon
         expect(cruiser.sunk?).to eq(false)
         cruiser.hit
