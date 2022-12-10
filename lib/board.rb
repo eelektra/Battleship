@@ -103,7 +103,6 @@ class Board
     def render(show = false)
        
         rendered = '  1 2 3 4 '
-       # require 'pry'; binding.pry
         rendered += @cells.each_value.map do |cell|
           cell.render(show)
         end.join(' ')
