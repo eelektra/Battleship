@@ -1,5 +1,6 @@
 class Board
     attr_reader :board, :cells
+
     def initialize
         @cells = {
             "A1" => Cell.new("A1"),
@@ -95,11 +96,6 @@ class Board
         end
     end
 
-    # def render
-         
-    #     @cells.each_value.map do |coordinate|
-    #         coordinate.render(show = false)
-    #     end
     def render(show = false)
        
         rendered = '  1 2 3 4 '
@@ -111,7 +107,9 @@ class Board
         rendered.insert(32, "\nC ")
         rendered.insert(43, "\nD ")
         rendered += " \n"
+    end
+
+      def fire_upon(coordinate)
+        @cells[coordinate].fire_upon
       end
-
-
 end
