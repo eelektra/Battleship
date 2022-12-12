@@ -4,8 +4,7 @@ require './lib/board'
 
 class Game
   def initialize
-    @computer = 
-    @player = 
+   
   end
 
   def start
@@ -18,7 +17,8 @@ class Game
       elsif user_input == "q"    
         quit_game
       else 
-        "Try again"
+        p "Try again"
+        start
       end
   end
 
