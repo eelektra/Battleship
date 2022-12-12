@@ -90,8 +90,10 @@ class Board
     
     def place(ship, coordinates)
         if valid_placement?(ship, coordinates)
+            require 'pry';binding.pry
             coordinates.each do |coordinate|
                     @cells[coordinate].place_ship(ship)
+                    #require 'pry';binding.pry
                 end
         end
     end

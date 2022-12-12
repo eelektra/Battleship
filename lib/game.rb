@@ -63,6 +63,7 @@ class Game
     @mac_board.place(@mac_cruiser, get_mac_ship_coordinates(@mac_cruiser))
     get_mac_ship_coordinates(@mac_sub)
     @mac_board.place(@mac_sub, get_mac_ship_coordinates(@mac_sub))
+    #require 'pry';binding.pry
   end
 
   def place_player_cruiser
@@ -90,7 +91,7 @@ class Game
 
   def turn
     puts "========= Computer Board ========="
-    puts @mac_board.render
+    puts @mac_board.render(true)
     puts "========= Player Board ========="
     puts @player_board.render(true)
     puts "Enter the coordinate for your strike."
