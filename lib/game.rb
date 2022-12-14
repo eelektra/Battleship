@@ -37,8 +37,8 @@ class Game
     coordinates = []
     until @computer_board.valid_placement?(ship, coordinates)   
       coordinates = @computer_board.cells.keys.sample(ship.length)
-      end
-        coordinates
+    end
+    coordinates
   end
 
   def computer_place_ship
@@ -47,6 +47,7 @@ class Game
         coordinates = computer_valid_coordinates(ship)
         @computer_board.place(ship, coordinates)
       end
+
     p "I have laid out my ships on the grid."
     p "You now need to lay out your two ships."
   end
@@ -55,6 +56,7 @@ class Game
     p "The Cruiser is three units long and the Submarine is two units long."
     puts @player_board.render(true)
     p "Enter the squares for the Cruiser (3 spaces):"
+
     user_input = gets.chomp.upcase.delete(",").split
     if @player_board.valid_placement?(@player_cruiser, user_input) == true
       @player_board.place(@player_cruiser, user_input)
@@ -67,6 +69,7 @@ class Game
   def player_place_submarine
     puts @player_board.render(true)
     p "Enter the squares for the Submarine (2 spaces):"
+
     user_input = gets.chomp.upcase.delete(",").split
     if @player_board.valid_placement?(@player_submarine, user_input) == true
       @player_board.place(@player_submarine, user_input)
@@ -85,6 +88,7 @@ class Game
 
   def player_shot
     p "Enter the coordinate for your shot:"
+
     user_input = gets.chomp.upcase
     if @computer_board.valid_coordinate?(user_input) == true
       @computer_board.cells[user_input].fire_upon
@@ -112,11 +116,13 @@ class Game
     elsif @player_board.cells[@computer_input].render == "M"
       p "My shot on #{@computer_input} was a miss."
     end
+
   end
 
   def computer_results
     if @computer_board.cells[@player_input].render == "X"
-      p "Your shot on #{@player_input} sunk my ship."
+      p "Your shot on #{@player_input} sunk my #{@computer_cruiser}."
+      p "Your shot on #{@player_input} sunk my #{@computer_submarine}."
     elsif @computer_board.cells[@player_input].render == "H"
       p "Your shot on #{@player_input} was a hit."
     elsif @computer_board.cells[@player_input].render == "M"
@@ -150,6 +156,8 @@ class Game
     else computer_wins
       p "I won!"
     end
+    p "GAME OVER"
+    start
   end
 
   def quit_game

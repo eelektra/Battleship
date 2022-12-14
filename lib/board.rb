@@ -1,5 +1,6 @@
 class Board
-    attr_reader :board, :cells
+    attr_reader :board, 
+                :cells
 
     def initialize
         @cells = {
@@ -92,7 +93,7 @@ class Board
         if valid_placement?(ship, coordinates)
             coordinates.each do |coordinate|
                     @cells[coordinate].place_ship(ship)
-                end
+            end
         end
     end
 
@@ -101,6 +102,6 @@ class Board
         "A #{@cells["A1"].render(show)} #{@cells["A2"].render(show)} #{@cells["A3"].render(show)} #{@cells["A4"].render(show)} \n" \
         "B #{@cells["B1"].render(show)} #{@cells["B2"].render(show)} #{@cells["B3"].render(show)} #{@cells["B4"].render(show)} \n" \
         "C #{@cells["C1"].render(show)} #{@cells["C2"].render(show)} #{@cells["C3"].render(show)} #{@cells["C4"].render(show)} \n" \
-        "D #{@cells["D1"].render(show)} #{@cells["D2"].render(show)} #{@cells["D3"].render(show)} #{@cells["D4"].render(show)}"
+        "D #{@cells["D1"].render(show)} #{@cells["D2"].render(show)} #{@cells["D3"].render(show)} #{@cells["D4"].render(show)} \n"
     end
 end
