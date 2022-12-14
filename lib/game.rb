@@ -19,18 +19,18 @@ class Game
   end
 
   def start
-      p "Welcome to BATTLESHIP"
-      p "Enter p to play. Enter q to quit."
-  
-      user_input = gets.chomp.downcase
-      if user_input == "p"
-        play_game
-      elsif user_input == "q"    
-        quit_game
-      else 
-        p "Try again"
-        start
-      end
+    p "Welcome to BATTLESHIP"
+    p "Enter p to play. Enter q to quit."
+
+    user_input = gets.chomp.downcase
+    if user_input == "p"
+      play_game
+    elsif user_input == "q"    
+      quit_game
+    else 
+      p "Try again"
+      start
+    end
   end
 
   def computer_valid_coordinates(ship)
@@ -91,14 +91,14 @@ class Game
     
     loop do
     user_shot = gets.chomp.upcase
-    if @computer_board.valid_coordinate?(user_shot) == true
-      @computer_board.cells[user_shot].fire_upon
-      @player_input = user_shot
-      break
-    elsif @computer_board.valid_coordinate?(user_shot) == false
-      p "Please enter a valid coordinate:"
+      if @computer_board.valid_coordinate?(user_shot) == true
+        @computer_board.cells[user_shot].fire_upon
+        @player_input = user_shot
+        break
+      elsif @computer_board.valid_coordinate?(user_shot) == false
+        p "Please enter a valid coordinate:"
+      end
     end
-  end
   end
 
   def computer_shot
