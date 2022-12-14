@@ -88,15 +88,18 @@ class Game
 
   def player_shot
     p "Enter the coordinate for your shot:"
-
-    user_input = gets.chomp.upcase
-    if @computer_board.valid_coordinate?(user_input) == true
-      @computer_board.cells[user_input].fire_upon
-    else @computer_board.valid_coordinate?(user_input) == false
+    
+    loop do
+    user_shot = gets.chomp.upcase
+    if @computer_board.valid_coordinate?(user_shot) == true
+      @computer_board.cells[user_shot].fire_upon
+      # require 'pry'; binding.pry
+      @player_input = user_shot
+      break
+    elsif @computer_board.valid_coordinate?(user_shot) == false
       p "Please enter a valid coordinate:"
-      player_shot
     end
-    @player_input = user_input
+  end
   end
 
   def computer_shot
@@ -109,6 +112,7 @@ class Game
   end
 
   def player_results
+    # require 'pry'; bindi ng.pry
     if @player_board.cells[@computer_input].render == "X"
       p "My shot on #{@computer_input} sunk your ship."
     elsif @player_board.cells[@computer_input].render == "H"
@@ -116,13 +120,11 @@ class Game
     elsif @player_board.cells[@computer_input].render == "M"
       p "My shot on #{@computer_input} was a miss."
     end
-
   end
 
   def computer_results
     if @computer_board.cells[@player_input].render == "X"
-      p "Your shot on #{@player_input} sunk my #{@computer_cruiser}."
-      p "Your shot on #{@player_input} sunk my #{@computer_submarine}."
+      p "Your shot on #{@player_input} sunk my ship."
     elsif @computer_board.cells[@player_input].render == "H"
       p "Your shot on #{@player_input} was a hit."
     elsif @computer_board.cells[@player_input].render == "M"
