@@ -1,171 +1,166 @@
 require './lib/cell'
 require './lib/ship'
 require './lib/board'
-require './lib/game'
 
 class Game
-  
-  attr_reader   :player_board,
-                :mac_board,
-                :player_ships,
-                :mac_cruiser,
-                :mac_sub,
-                :mac_ships,
-                :message
-    
-  
+  attr_reader :computer_board, 
+              :computer_cruiser, 
+              :computer_submarine
+
   def initialize
-    @player_board   = Board.new
-    @mac_board      = Board.new
-    @player_cruiser = Ship.new("Cruiser", 3)
-    @player_sub     = Ship.new("Submarine", 2)
-    @mac_cruiser    = Ship.new("Cruiser", 3)
-    @mac_sub        = Ship.new("Submarine", 2)
+      @computer_board = Board.new
+      @player_board = Board.new
+      @computer_cruiser = Ship.new("Cruiser", 3)
+      @computer_submarine = Ship.new("Submarine", 2)
+      @player_cruiser = Ship.new("Cruiser", 3)
+      @player_submarine = Ship.new("Submarine", 2)
+      @computer_input = nil
+      @player_input = nil
   end
 
-  
   def start
-    p "Welcome to BATTLESHIP"
-    p "Enter p to play. Enter q to quit."
+      p "Welcome to BATTLESHIP"
+      p "Enter p to play. Enter q to quit."
   
-    user_input = gets.chomp.downcase
+      user_input = gets.chomp.downcase
       if user_input == "p"
-         place_mac_ships
-         puts "I have laid out my two ships on the board." 
-         puts "You now need to lay out your two ships.\nThe Cruiser is three coordinates long.\nThe Submarine is two coordinates long."
-         puts "Enter three coordinates for your Cruiser (for example, b1 b2 b3):"
-         place_player_cruiser
-         puts "Enter two coordinates for your Submarine"
-         place_player_sub
-         turn
-      elsif user_input == "q" 
-        "See you next time!"
-        exit
+        play_game
+      elsif user_input == "q"    
+        quit_game
       else 
-        "Try again"
+        p "Try again"
+        start
       end
   end
 
-  def get_mac_ship_coordinates(ship)
-    @mac_board.cells.keys.sample(ship.length)
+  def computer_valid_coordinates(ship)
+    coordinates = []
+    until @computer_board.valid_placement?(ship, coordinates)   
+      coordinates = @computer_board.cells.keys.sample(ship.length)
+    end
+    coordinates
   end
 
-  def validate_mac_ship_coordinates(ship)
-    random_coordinates = []
-      until @mac_board.valid_placement?(ship, random_coordinates) do
-        random_coordinates = get_mac_ship_coordinates(ship)
+  def computer_place_ship
+    ships = [@computer_cruiser, @computer_submarine]
+      ships.each do |ship|
+        coordinates = computer_valid_coordinates(ship)
+        @computer_board.place(ship, coordinates)
       end
-        random_coordinates
+
+    p "I have laid out my ships on the grid."
+    p "You now need to lay out your two ships."
   end
 
-  def place_mac_ships
-    get_mac_ship_coordinates(@mac_cruiser)
-    @mac_board.place(@mac_cruiser, get_mac_ship_coordinates(@mac_cruiser))
-    get_mac_ship_coordinates(@mac_sub)
-    @mac_board.place(@mac_sub, get_mac_ship_coordinates(@mac_sub))
-    #require 'pry';binding.pry
-  end
-
-  def place_player_cruiser
+  def player_place_cruiser
+    p "The Cruiser is three units long and the Submarine is two units long."
     puts @player_board.render(true)
-    user_prompt = gets.chomp.upcase.split(" ")
-    if @player_board.valid_placement?(@player_cruiser, user_prompt)
-      @player_board.place(@player_cruiser, user_prompt)
-    else
-      puts "Those are invalid coordinates. Please try again:"
-      place_player_cruiser
+    p "Enter the squares for the Cruiser (3 spaces):"
+
+    user_input = gets.chomp.upcase.delete(",").split
+    if @player_board.valid_placement?(@player_cruiser, user_input) == true
+      @player_board.place(@player_cruiser, user_input)
+    else @player_board.valid_placement?(@player_cruiser, user_input) == false
+      p "Those are invalid coordinates. Please try again:"
+      player_place_cruiser
     end
   end
 
-  def place_player_sub
+  def player_place_submarine
     puts @player_board.render(true)
-    user_prompt = gets.chomp.upcase.split(" ")
-    if @player_board.valid_placement?(@player_sub, user_prompt)
-      @player_board.place(@player_sub, user_prompt)
-      puts @player_board.render(true)
-    else
-      puts "Those are invalid coordinates. Please try again:"
-      place_player_sub
+    p "Enter the squares for the Submarine (2 spaces):"
+
+    user_input = gets.chomp.upcase.delete(",").split
+    if @player_board.valid_placement?(@player_submarine, user_input) == true
+      @player_board.place(@player_submarine, user_input)
+    else @player_board.valid_placement?(@player_submarine, user_input) == false
+      p "Those are invalid coordinates. Please try again:"
+      player_place_submarine
     end
   end
 
   def turn
-    puts "========= Computer Board ========="
-    puts @mac_board.render(true)
-    puts "========= Player Board ========="
+    p "=============COMPUTER BOARD============="
+    puts @computer_board.render
+    p "==============PLAYER BOARD=============="
     puts @player_board.render(true)
-    puts "Enter the coordinate for your strike."
-    get_player_strike_coordinate
-    player_wins
-    mac_strike
-    mac_wins
-    turn
   end
 
-  def get_player_strike_coordinate
-    player_strike = gets.chomp.upcase
-      if @mac_board.valid_coordinate?(player_strike.strip) == true
-        print_player_strike_outcomes(player_strike)
-      else
-        puts "That is an invalid strike coordinate. Try Again:"
-        get_player_strike_coordinate
-      end
+  def player_shot
+    p "Enter the coordinate for your shot:"
+    
+    loop do
+    user_shot = gets.chomp.upcase
+    if @computer_board.valid_coordinate?(user_shot) == true
+      @computer_board.cells[user_shot].fire_upon
+      @player_input = user_shot
+      break
+    elsif @computer_board.valid_coordinate?(user_shot) == false
+      p "Please enter a valid coordinate:"
+    end
+  end
   end
 
-  def print_player_strike_outcomes(player_strike)
-    @mac_board.cells[player_strike].fire_upon
-      if @mac_board.cells[player_strike].strike_miss
-      "M"
-      puts "Your strike on #{player_strike} missed!"
-      elsif @mac_board.cells[strike].ship_destroyed
-      "X"
-      puts "Your strike on #{player_strike} sunk my ship!"
-      elsif @mac_board.cells[strike].ship_damage
-      "H"
-      puts "Your strike on #{player_strike} was a direct hit!"
-      else
-       "."
-      end
+  def computer_shot
+    coordinate = @player_board.cells.keys.sample
+    until @player_board.cells[coordinate].fired_upon? == false
+      coordinate = @player_board.cells.keys.sample
+    end
+    @player_board.cells[coordinate].fire_upon
+    @computer_input = coordinate
   end
 
-  def mac_strike
-    mac_strike = @player_board.cells.keys.sample(1).join
-    if @player_board.valid_coordinate?(mac_strike) == true
-      mac_strike_outcomes(mac_strike)
-    else
-      mac_strike
+  def player_results
+    if @player_board.cells[@computer_input].render == "X"
+      p "My shot on #{@computer_input} sunk your ship."
+    elsif @player_board.cells[@computer_input].render == "H"
+      p "My shot on #{@computer_input} was a hit."
+    elsif @player_board.cells[@computer_input].render == "M"
+      p "My shot on #{@computer_input} was a miss."
     end
   end
 
-  def mac_strike_outcomes(mac_strike)
-    @player_board.cells[mac_strike].fire_upon
-      if @player_board.cells[mac_strike].strike_miss
-        "M"
-        puts "My shot on #{mac_strike} was a miss."
-      elsif @player_board.cells[mac_strike].ship_destroyed
-        "X"
-        puts "My shot on #{mac_strike} has destroyed your ship."
-      elsif @player_board.cells[mac_strike].ship_damage
-        "H"
-        puts "My shot on #{mac_strike} was a hit."
-      else
-       "."
-      end
+  def computer_results
+    if @computer_board.cells[@player_input].render == "X"
+      p "Your shot on #{@player_input} sunk my ship."
+    elsif @computer_board.cells[@player_input].render == "H"
+      p "Your shot on #{@player_input} was a hit."
+    elsif @computer_board.cells[@player_input].render == "M"
+      p "Your shot on #{@player_input} was a miss."
+    end
   end
 
   def player_wins
-    if @mac_cruiser.sunk? && @mac_sub.sunk?
-      puts "You have won the game!"
-      initialize
-      start
-    end
+    @computer_cruiser.sunk? == true && @computer_submarine.sunk? == true
   end
 
-  def mac_wins
-    if @player_cruiser.sunk?  && @player_sub.sunk?
-      puts "You have lost the game."
-      #initialize
-      start
+  def computer_wins
+    @player_cruiser.sunk? == true && @player_submarine.sunk? == true
+  end
+
+  def play_game
+    computer_place_ship
+    player_place_cruiser
+    player_place_submarine
+
+    until player_wins || computer_wins
+      turn 
+      player_shot
+      computer_shot
+      player_results
+      computer_results
     end
+
+    if player_wins
+      p "You won!"
+    else computer_wins
+      p "I won!"
+    end
+    p "GAME OVER"
+    start
+  end
+
+  def quit_game
+     p "See you next time!"
   end
 end
