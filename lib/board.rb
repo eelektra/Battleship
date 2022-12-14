@@ -1,6 +1,5 @@
 class Board
-    attr_reader :board, 
-                :cells
+    attr_reader :board, :cells
 
     def initialize
         @cells = {
@@ -48,8 +47,8 @@ class Board
     end
     
     def all_letters(coordinates)
-        coordinates.flat_map do |coordinate| 
-            coordinate.split("").first 
+        coordinates.map do |coordinate| 
+            coordinate.split('').first 
         end
     end
     
@@ -91,17 +90,28 @@ class Board
     
     def place(ship, coordinates)
         if valid_placement?(ship, coordinates)
+            require 'pry';binding.pry
             coordinates.each do |coordinate|
                     @cells[coordinate].place_ship(ship)
-            end
+                    #require 'pry';binding.pry
+                end
         end
     end
 
     def render(show = false)
-        "  1 2 3 4 \n" \
-        "A #{@cells["A1"].render(show)} #{@cells["A2"].render(show)} #{@cells["A3"].render(show)} #{@cells["A4"].render(show)} \n" \
-        "B #{@cells["B1"].render(show)} #{@cells["B2"].render(show)} #{@cells["B3"].render(show)} #{@cells["B4"].render(show)} \n" \
-        "C #{@cells["C1"].render(show)} #{@cells["C2"].render(show)} #{@cells["C3"].render(show)} #{@cells["C4"].render(show)} \n" \
-        "D #{@cells["D1"].render(show)} #{@cells["D2"].render(show)} #{@cells["D3"].render(show)} #{@cells["D4"].render(show)} \n"
+       
+        rendered = '  1 2 3 4 '
+        rendered += @cells.each_value.map do |cell|
+          cell.render(show)
+        end.join(' ')
+        rendered.insert(10, "\nA ")
+        rendered.insert(21, "\nB ")
+        rendered.insert(32, "\nC ")
+        rendered.insert(43, "\nD ")
+        rendered += " \n"
     end
+
+      def fire_upon(coordinate)
+        @cells[coordinate].fire_upon
+      end
 end
