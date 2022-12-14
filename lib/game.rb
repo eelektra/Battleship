@@ -90,7 +90,7 @@ class Game
     p "Enter the coordinate for your shot:"
     
     loop do
-    user_shot = gets.chomp.upcase
+      user_shot = gets.chomp.upcase
       if @computer_board.valid_coordinate?(user_shot) == true
         @computer_board.cells[user_shot].fire_upon
         @player_input = user_shot
