@@ -20,9 +20,28 @@ class Cell
         @fired_upon
     end
 
+    # def fire_upon
+    #     @fired_upon = true
+    #     ship.hit if ship != nil
+    # end
     def fire_upon
+        if @ship != nil
+          @ship.hit
+          @fired_upon = true
+         end
         @fired_upon = true
-        ship.hit if ship != nil
+    end
+    
+    def strike_miss
+        fired_upon? && empty?
+    end
+    
+    def ship_destroyed
+        fired_upon? && @ship.sunk?
+    end
+    
+    def ship_damage
+        fired_upon? && !empty?
     end
 
     def render(show = false)
